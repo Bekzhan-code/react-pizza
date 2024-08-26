@@ -2,7 +2,7 @@ import React from "react";
 
 const Header = () => {
   return (
-    <div className="flex justify-between py-12">
+    <div className="flex justify-between py-12 cursor-pointer">
       <div className="flex items-center gap-4">
         <img src="/logo.svg" alt="pizza logo" />
         <div>

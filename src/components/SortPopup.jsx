@@ -12,7 +12,7 @@ const SortPopup = () => {
       onClick={() => setIsVisible(!isVisible)}
     >
       <svg
-        className={`${isVisible ? "rotate-180" : ""} transition`}
+        className={`${isVisible ? "rotate-180" : ""}`}
         width="10"
         height="6"
         viewBox="0 0 10 6"
