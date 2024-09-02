@@ -6,8 +6,12 @@ const Header = () => {
       <div className="flex items-center gap-4">
         <img src="/logo.svg" alt="pizza logo" />
         <div>
-          <h2 className="uppercase font-extrabold text-2xl">react pizza</h2>
-          <p className="text-customGray">самая вкусная пицца во вселенной</p>
+          <h2 className="uppercase font-extrabold text-2xl md:text-xl">
+            react pizza
+          </h2>
+          <p className="text-customGray md:text-sm">
+            самая вкусная пицца во вселенной
+          </p>
         </div>
       </div>
 

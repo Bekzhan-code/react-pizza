@@ -17,7 +17,7 @@ const Categories = () => {
       {categories.map((category, index) => (
         <li
           key={index}
-          className={`font-semibold py-2 px-6 rounded-full cursor-pointer text-center ${
+          className={`font-semibold py-2 px-6 rounded-full cursor-pointer text-center transition md:text-sm ${
             activeCategoryInd === index
               ? "bg-customBlack text-white"
               : "bg-white text-customBlack"

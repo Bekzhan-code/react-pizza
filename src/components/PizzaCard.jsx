@@ -1,29 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 
-const PizzaCard = ({ title, types, sizes, price }) => {
+const types = ["тонкое", "традиционное"];
+const sizes = [26, 30, 40];
+
+const PizzaCard = ({ title, imageUrl, price }) => {
+  const [activeTypeId, setActiveTypeId] = useState(0);
+  const [activeSizeId, setActiveSizeId] = useState(1);
+
+  const onChangeSize = (sizeId) => {
+    if (sizeId === 0 && activeTypeId === 0) setActiveTypeId(1);
+    setActiveSizeId(sizeId);
+  };
+
   return (
     <div className="flex flex-col items-center max-w-72">
-      <img src="/pizzas/pizza-1.svg" alt="pizza card" />
+      <img src={imageUrl} alt="pizza card" />
       <h3 className="text-lg font-extrabold min-h-16 text-center">{title}</h3>
-      <div className="text-sm font-bold mb-4 w-full">
+      <div className="text-sm font-bold mb-4 w-full bg-gray-200 rounded p-2">
         <ul className="flex gap-2 mb-2 text-center">
-          <li className="py-2 w-1/2  rounded shadow-sm cursor-pointer hover:bg-gray-200 transition">
-            тонкое
-          </li>
-          <li className="py-2 w-1/2  rounded shadow-sm cursor-pointer hover:bg-gray-200 transition">
-            традиционное
-          </li>
+          {types.map((type, i) => (
+            <li
+              className={`py-2 w-1/2  rounded cursor-pointer transition  ${
+                activeTypeId === i ? "shadow-sm bg-white" : ""
+              } ${
+                activeSizeId === 0 && i === 0
+                  ? "opacity-50 cursor-not-allowed pointer-events-none"
+                  : ""
+              }`}
+              onClick={() => setActiveTypeId(i)}
+            >
+              {type}
+            </li>
+          ))}
         </ul>
         <ul className="flex gap-2 text-center">
-          <li className="py-2 w-1/3 rounded shadow-sm cursor-pointer hover:bg-gray-200 transition">
-            26 см.
-          </li>
-          <li className="py-2 w-1/3 rounded shadow-sm cursor-pointer hover:bg-gray-200 transition">
-            30 см.
-          </li>
-          <li className="py-2 w-1/3 rounded shadow-sm cursor-pointer hover:bg-gray-200 transition">
-            40 см.
-          </li>
+          {sizes.map((size, i) => (
+            <li
+              className={`py-2 w-1/3 rounded cursor-pointer transition ${
+                activeSizeId === i ? "shadow-sm bg-white" : ""
+              }`}
+              onClick={() => onChangeSize(i)}
+            >
+              {size} см.
+            </li>
+          ))}
         </ul>
       </div>
       <div className="flex justify-between items-center w-full">
