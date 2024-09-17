@@ -21,7 +21,10 @@ module.exports = {
     extend: {
       colors: {
         customYellow: "#FFDF8C",
-        customGray: "#7B7B7B",
+        customDarkGray: "#7B7B7B",
+        customLightGray: "#B6B6B6",
+        customExtraLightGray: "#CACACA",
+        customMidGray: "#8D8D8D",
         customOrange: "#FE5F1E",
         customBlack: "#282828",
         customLightOrange: "#EB5A1E",

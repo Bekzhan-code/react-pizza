@@ -11,7 +11,7 @@ const Header = () => {
             <h2 className="uppercase font-extrabold text-2xl md:text-xl">
               react pizza
             </h2>
-            <p className="text-customGray md:text-sm">
+            <p className="text-customDarkGray md:text-sm">
               самая вкусная пицца во вселенной
             </p>
           </div>
