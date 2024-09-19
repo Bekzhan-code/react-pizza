@@ -1,10 +1,33 @@
 import React, { useState } from "react";
+import { useAppDispatch } from "../redux/store";
+import { setSortType } from "../redux/slices/filterSlice";
 
-const sortOptions = ["популярности", "цене", "алфавиту"];
+// const sortOptions = ["популярности", "цене", "алфавиту"];
+const sortOptions = [
+  {
+    name: "популярности",
+    sortBy: "rating",
+  },
+  {
+    name: "цене",
+    sortBy: "price",
+  },
+  {
+    name: "алфавиту",
+    sortBy: "title",
+  },
+];
 
 const SortPopup = () => {
   const [activeSortInd, setActiveSortInd] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
+
+  const dispatch = useAppDispatch();
+
+  const handleSortType = (index) => {
+    setActiveSortInd(index);
+    dispatch(setSortType(sortOptions[index].sortBy));
+  };
 
   return (
     <div
@@ -25,19 +48,21 @@ const SortPopup = () => {
         />
       </svg>
       <span className=" font-bold">Сортировка по:</span>
-      <span className="text-customOrange">{sortOptions[activeSortInd]}</span>
+      <span className="text-customOrange">
+        {sortOptions[activeSortInd].name}
+      </span>
 
       {isVisible && (
         <ul className="absolute top-10 left-24 rounded-xl bg-white py-3 shadow-lg ">
-          {sortOptions.map((option, index) => (
+          {sortOptions.map((obj, index) => (
             <li
               className={`py-2 px-4 cursor-pointer hover:bg-orange-50 ${
                 activeSortInd === index ? "font-bold text-customOrange" : ""
               }`}
               key={index}
-              onClick={() => setActiveSortInd(index)}
+              onClick={() => handleSortType(index)}
             >
-              {option}
+              {obj.name}
             </li>
           ))}
         </ul>

@@ -27,6 +27,7 @@ const PizzaCard = ({ title, imageUrl, price }) => {
                   ? "opacity-50 cursor-not-allowed pointer-events-none"
                   : ""
               }`}
+              key={i}
               onClick={() => setActiveTypeId(i)}
             >
               {type}
@@ -39,6 +40,7 @@ const PizzaCard = ({ title, imageUrl, price }) => {
               className={`py-2 w-1/3 rounded cursor-pointer transition ${
                 activeSizeId === i ? "shadow-sm bg-white" : ""
               }`}
+              key={i}
               onClick={() => onChangeSize(i)}
             >
               {size} см.

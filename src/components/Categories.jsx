@@ -1,16 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "../redux/store";
+import { setCategoryInd } from "../redux/slices/filterSlice";
 
-const categories = [
-  "Все",
-  "Мясные",
-  "Вегетарианская",
-  "Гриль",
-  "Острые",
-  "Закрытые",
-];
+const categories = ["Все", "Мясные", "Колбасные", "Сырные", "Микс", "Острые"];
 
 const Categories = () => {
-  const [activeCategoryInd, setActiveCategoryInd] = useState(0);
+  // const [activeCategoryInd, setActiveCategoryInd] = useState(0);
+  const activeCategoryInd = useSelector((state) => state.filter.categoryInd);
+  const dispatch = useAppDispatch();
 
   return (
     <ul className="grid grid-flow-col gap-2 xl:grid-rows-2">
@@ -22,7 +20,7 @@ const Categories = () => {
               ? "bg-customBlack text-white"
               : "bg-white text-customBlack"
           }`}
-          onClick={() => setActiveCategoryInd(index)}
+          onClick={() => dispatch(setCategoryInd(index))}
         >
           {category}
         </li>
