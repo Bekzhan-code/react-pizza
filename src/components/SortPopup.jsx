@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "../redux/store";
 import { setSortType } from "../redux/slices/filterSlice";
 
@@ -22,6 +22,8 @@ const SortPopup = () => {
   const [activeSortInd, setActiveSortInd] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
+  const sortRef = useRef();
+
   const dispatch = useAppDispatch();
 
   const handleSortType = (index) => {
@@ -29,8 +31,18 @@ const SortPopup = () => {
     dispatch(setSortType(sortOptions[index].sortBy));
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!sortRef.current.contains(event.target)) setIsVisible(false);
+    };
+    document.body.addEventListener("click", handleClickOutside);
+
+    return () => document.body.removeEventListener("click", handleClickOutside);
+  }, []);
+
   return (
     <div
+      ref={sortRef}
       className="flex justify-between items-center gap-2 text-sm relative cursor-pointer"
       onClick={() => setIsVisible(!isVisible)}
     >
