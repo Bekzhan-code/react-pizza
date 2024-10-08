@@ -1,13 +1,40 @@
 import React, { useState } from "react";
 
+import { useAppDispatch } from "../../redux/store";
+import { addItem } from "../../redux/slices/cartSlice";
+import { useSelector } from "react-redux";
+
+// TODO
+// НУЖНО ПЕРЕНЕСТИ ЭТИ ЗНАЧЕНИЯ В ОТДЕЛЬНЫЙ ФАЙЛ ДЛЯ ДОСТУПА ИЗ ОДНОГО МЕСТА
 const types = ["тонкое", "традиционное"];
 const sizes = [26, 30, 40];
 
-const PizzaCard = ({ title, imageUrl, price }) => {
+const PizzaCard = ({ id, title, imageUrl, price }) => {
   const [activeTypeId, setActiveTypeId] = useState(0);
   const [activeSizeId, setActiveSizeId] = useState(1);
 
-  const onChangeSize = (sizeId) => {
+  const itemCount = useSelector((state) =>
+    state.cart.items
+      .filter((item) => item.id === id)
+      .reduce((acc, item) => acc + item.count, 0)
+  );
+
+  const dispatch = useAppDispatch();
+
+  const handleAddItem = () => {
+    dispatch(
+      addItem({
+        id,
+        title,
+        imageUrl,
+        price,
+        type: types[activeTypeId],
+        size: sizes[activeSizeId],
+      })
+    );
+  };
+
+  const handleChangeSize = (sizeId) => {
     if (sizeId === 0 && activeTypeId === 0) setActiveTypeId(1);
     setActiveSizeId(sizeId);
   };
@@ -41,7 +68,7 @@ const PizzaCard = ({ title, imageUrl, price }) => {
                 activeSizeId === i ? "shadow-sm bg-white" : ""
               }`}
               key={i}
-              onClick={() => onChangeSize(i)}
+              onClick={() => handleChangeSize(i)}
             >
               {size} см.
             </li>
@@ -50,7 +77,10 @@ const PizzaCard = ({ title, imageUrl, price }) => {
       </div>
       <div className="flex justify-between items-center w-full">
         <span className="text-2xl font-bold">от {price} ₽</span>
-        <button className="flex gap-2 items-center rounded-full py-2 px-3 font-bold text-customLightOrange border border-customLightOrange transition hover:bg-customLightOrange hover:text-white">
+        <button
+          className="flex gap-2 items-center rounded-full py-2 px-3 font-bold text-customLightOrange border border-customLightOrange transition hover:bg-customLightOrange hover:text-white"
+          onClick={handleAddItem}
+        >
           <svg
             className="hover:text-white"
             width="12"
@@ -65,9 +95,13 @@ const PizzaCard = ({ title, imageUrl, price }) => {
             />
           </svg>
           <span>Добавить</span>
-          <span className="text-sm text-white bg-customLightOrange rounded-full text-center w-5 h-5">
-            2
-          </span>
+          {itemCount ? (
+            <span className="text-sm text-white bg-customLightOrange rounded-full text-center w-5 h-5">
+              {itemCount}
+            </span>
+          ) : (
+            ""
+          )}
         </button>
       </div>
     </div>

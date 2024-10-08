@@ -1,7 +1,10 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const Header = () => {
+  const { totalPrice, totalCount } = useSelector((state) => state.cart);
+
   return (
     <div className="flex justify-between py-12">
       <Link to="/">
@@ -20,7 +23,7 @@ const Header = () => {
 
       <Link to="/cart">
         <button className="flex items-center bg-customOrange rounded-full text-white font-bold py-4 px-6 ">
-          520 ₽
+          {totalPrice} ₽
           <svg
             className="mx-3"
             width="1"
@@ -61,7 +64,7 @@ const Header = () => {
               stroke-linejoin="round"
             />
           </svg>
-          3
+          {totalCount}
         </button>
       </Link>
     </div>

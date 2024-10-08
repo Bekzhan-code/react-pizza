@@ -1,7 +1,10 @@
 import React from "react";
 import CartPizza from "../components/CartPizza";
+import { useSelector } from "react-redux";
 
 const Cart = () => {
+  const { items, totalPrice, totalCount } = useSelector((state) => state.cart);
+
   return (
     <div className="py-24 max-w-4xl mx-auto">
       <div className="flex justify-between items-center">
@@ -38,7 +41,7 @@ const Cart = () => {
           <h1 className="text-3xl font-bold ml-4">Корзина</h1>
         </div>
 
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center cursor-pointer">
           <svg
             width="20"
             height="20"
@@ -80,18 +83,18 @@ const Cart = () => {
       </div>
 
       <div className="py-10 flex flex-col gap-8">
-        <CartPizza />
-        <CartPizza />
-        <CartPizza />
+        {items.map((item) => (
+          <CartPizza {...item} />
+        ))}
       </div>
 
       <div className="flex flex-col gap-10">
         <div className="flex justify-between">
           <p className="text-[22px]">
-            Всего пицц: <b>3 шт.</b>
+            Всего пицц: <b>{totalCount} шт.</b>
           </p>
           <p className="text-[22px]">
-            Сумма заказа: <b className="text-customOrange">900 ₽</b>
+            Сумма заказа: <b className="text-customOrange">{totalPrice} ₽</b>
           </p>
         </div>
 

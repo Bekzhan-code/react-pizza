@@ -1,22 +1,39 @@
 import React from "react";
 
-const index = () => {
+import { useAppDispatch } from "../../redux/store";
+import { addItem } from "../../redux/slices/cartSlice";
+
+const CartPizza = ({ id, imageUrl, title, price, type, size, count }) => {
+  const dispatch = useAppDispatch();
+
+  const handleAddItem = () => {
+    dispatch(
+      addItem({
+        id,
+        title,
+        imageUrl,
+        price,
+        type,
+        size,
+      })
+    );
+  };
+
   return (
     <div className="flex items-center justify-between">
-      <div className="flex items-center gap-4">
-        <img
-          className="max-w-20 max-h-20"
-          src="https://media.dodostatic.net/image/r:292x292/11EE7D5F9D4F264D98D40BF411913DB1.avif"
-          alt="cart pizza"
-        />
+      <div className="flex items-center gap-4 min-w-[315px]">
+        <img className="max-w-20 max-h-20" src={imageUrl} alt="cart pizza" />
         <div>
-          <h3 className="text-[22px] font-bold">Сырный цыпленок</h3>
-          <span className="text-customMidGray">тонкое тесто, 26 см.</span>
+          <h3 className="text-[22px] font-bold">{title}</h3>
+          <span className="text-customMidGray">
+            {type} тесто, {size} см.
+          </span>
         </div>
       </div>
 
       <div className="flex items-center gap-3 text-[22px] font-bold">
         <svg
+          className="cursor-pointer"
           width="32"
           height="32"
           viewBox="0 0 32 32"
@@ -36,8 +53,10 @@ const index = () => {
             fill="#FE5F1E"
           />
         </svg>
-        <span>2</span>
+        <span>{count}</span>
         <svg
+          className="cursor-pointer"
+          onClick={handleAddItem}
           width="32"
           height="32"
           viewBox="0 0 32 32"
@@ -59,9 +78,10 @@ const index = () => {
         </svg>
       </div>
 
-      <span className="text-[22px] font-bold">770 ₽</span>
+      <span className="text-[22px] font-bold">{price} ₽</span>
 
       <svg
+        className="cursor-pointer"
         width="32"
         height="32"
         viewBox="0 0 32 32"
@@ -85,4 +105,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default CartPizza;
