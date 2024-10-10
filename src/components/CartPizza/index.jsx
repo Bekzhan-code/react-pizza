@@ -1,7 +1,7 @@
 import React from "react";
 
 import { useAppDispatch } from "../../redux/store";
-import { addItem } from "../../redux/slices/cartSlice";
+import { addItem, postCartItems } from "../../redux/slices/cartSlice";
 
 const CartPizza = ({ id, imageUrl, title, price, type, size, count }) => {
   const dispatch = useAppDispatch();
@@ -9,6 +9,18 @@ const CartPizza = ({ id, imageUrl, title, price, type, size, count }) => {
   const handleAddItem = () => {
     dispatch(
       addItem({
+        id,
+        title,
+        imageUrl,
+        price,
+        type,
+        size,
+      })
+    );
+
+    // не работает вызов postCartItems
+    dispatch(
+      postCartItems({
         id,
         title,
         imageUrl,

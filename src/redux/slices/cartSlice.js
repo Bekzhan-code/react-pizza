@@ -8,13 +8,34 @@ export const fetchCartItems = createAsyncThunk(
 
 export const postCartItems = createAsyncThunk(
   "cart/postCartItems",
-  async (_, { getState }) => {
+  async (newItem, { getState }) => {
+    // const state = getState();
+    // const curCartItems = state.cart.items;
+    // console.log("from postCartItems", curCartItems);
+    // const { data } = await axios.post(
+    //   "https://eaed36219e51a8b4.mokky.dev/cart",
+    //   state.cart.items
+    // );
+    // return data;
+
+    console.log("in postCartItems async func");
     const state = getState();
-    const { data } = await axios.post(
-      "https://eaed36219e51a8b4.mokky.dev/items",
-      state.cart.items
-    );
-    return data;
+    const existingItem = findExistingItem(state.cart, newItem);
+    let response;
+    if (existingItem) {
+      console.log("postCartItems exists:", existingItem);
+      response = await axios.patch(
+        `https://eaed36219e51a8b4.mokky.dev/cart/${newItem.id}`,
+        { count: newItem.count + 1 }
+      );
+    } else {
+      console.log("postCartItems doesnt exist:", existingItem);
+      response = await axios.post(
+        "https://eaed36219e51a8b4.mokky.dev/cart",
+        newItem
+      );
+    }
+    return response.data;
   }
 );
 
@@ -25,6 +46,17 @@ const initialState = {
   totalCount: 0,
 };
 
+const findExistingItem = (state, newItem) => {
+  return state.items.find((item) => {
+    if (
+      item.id === newItem.id &&
+      item.type === newItem.type &&
+      item.size === newItem.size
+    )
+      return item;
+  });
+};
+
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
@@ -33,14 +65,7 @@ export const cartSlice = createSlice({
       const newItem = action.payload;
 
       // если размер или тип пиццы отлчиается от пицц в корзине (даже если id равные), то пицца добавляется как новый элемент
-      const existingItem = state.items.find((item) => {
-        if (
-          item.id === newItem.id &&
-          item.type === newItem.type &&
-          item.size === newItem.size
-        )
-          return item;
-      });
+      const existingItem = findExistingItem(state, newItem);
       if (existingItem) existingItem.count += 1;
       else state.items.push({ ...newItem, count: 1 });
 

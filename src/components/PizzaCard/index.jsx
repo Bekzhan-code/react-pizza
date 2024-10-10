@@ -75,8 +75,10 @@ const PizzaCard = ({ id, title, imageUrl, price }) => {
           ))}
         </ul>
       </div>
+
       <div className="flex justify-between items-center w-full">
         <span className="text-2xl font-bold">от {price} ₽</span>
+
         <button
           className="flex gap-2 items-center rounded-full py-2 px-3 font-bold text-customLightOrange border border-customLightOrange transition hover:bg-customLightOrange hover:text-white"
           onClick={handleAddItem}
@@ -104,6 +106,17 @@ const PizzaCard = ({ id, title, imageUrl, price }) => {
           )}
         </button>
       </div>
+
+      {/* UI для изменения количества пицц */}
+      {/* <div className="flex items-center justify-center gap-4 mb-4">
+        <button className="flex justify-center items-center bg-gray-300 text-lg font-bold rounded-full w-8 h-8 transition hover:bg-gray-400">
+          -
+        </button>
+        <span className="text-lg font-bold">3</span>
+        <button className="flex justify-center items-center bg-gray-300 text-lg font-bold rounded-full w-8 h-8 transition hover:bg-gray-400">
+          +
+        </button>
+      </div> */}
     </div>
   );
 };
