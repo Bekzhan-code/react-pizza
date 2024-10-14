@@ -3,38 +3,48 @@ import axios from "axios";
 
 export const fetchCartItems = createAsyncThunk(
   "cart/fetchCartItems",
-  async () => {}
+  async () => {
+    const { data } = await axios.get("https://eaed36219e51a8b4.mokky.dev/cart");
+    return data;
+  }
 );
 
-export const postCartItems = createAsyncThunk(
-  "cart/postCartItems",
-  async (newItem, { getState }) => {
-    // const state = getState();
-    // const curCartItems = state.cart.items;
-    // console.log("from postCartItems", curCartItems);
-    // const { data } = await axios.post(
-    //   "https://eaed36219e51a8b4.mokky.dev/cart",
-    //   state.cart.items
-    // );
-    // return data;
-
-    console.log("in postCartItems async func");
+// НЕ РАБОТАЕТ
+export const postCartItem = createAsyncThunk(
+  "cart/postCartItem",
+  async (newItem, { getState, dispatch }) => {
+    console.log("in postCartItem");
     const state = getState();
-    const existingItem = findExistingItem(state.cart, newItem);
+
+    const existingItem = findExistingItem(state.cart.items, newItem);
     let response;
-    if (existingItem) {
-      console.log("postCartItems exists:", existingItem);
+    if (existingItem && existingItem.id) {
       response = await axios.patch(
-        `https://eaed36219e51a8b4.mokky.dev/cart/${newItem.id}`,
-        { count: newItem.count + 1 }
+        `https://eaed36219e51a8b4.mokky.dev/cart/${existingItem.id}`,
+        { count: existingItem.count + 1 }
       );
-    } else {
-      console.log("postCartItems doesnt exist:", existingItem);
-      response = await axios.post(
-        "https://eaed36219e51a8b4.mokky.dev/cart",
-        newItem
-      );
+    } else if (!existingItem.count) {
+      response = await axios.post(`https://eaed36219e51a8b4.mokky.dev/cart`, {
+        ...newItem,
+        count: 1,
+      });
     }
+
+    dispatch(addItem(newItem));
+    return response.data;
+  }
+);
+
+export const deleteCartItem = createAsyncThunk(
+  "cart/deleteCartItem",
+  async (item, { dispatch }) => {
+    console.log("in deleteCartItem");
+    let response;
+    if (item.id)
+      response = await axios.delete(
+        `https://eaed36219e51a8b4.mokky.dev/cart/${item.id}`
+      );
+    dispatch(removeItem(item));
     return response.data;
   }
 );
@@ -46,10 +56,10 @@ const initialState = {
   totalCount: 0,
 };
 
-const findExistingItem = (state, newItem) => {
-  return state.items.find((item) => {
+const findExistingItem = (items, newItem) => {
+  return items.find((item) => {
     if (
-      item.id === newItem.id &&
+      item.pizzaId === newItem.pizzaId &&
       item.type === newItem.type &&
       item.size === newItem.size
     )
@@ -65,29 +75,62 @@ export const cartSlice = createSlice({
       const newItem = action.payload;
 
       // если размер или тип пиццы отлчиается от пицц в корзине (даже если id равные), то пицца добавляется как новый элемент
-      const existingItem = findExistingItem(state, newItem);
+      const existingItem = findExistingItem(state.items, newItem);
       if (existingItem) existingItem.count += 1;
       else state.items.push({ ...newItem, count: 1 });
 
       state.totalPrice += newItem.price;
       state.totalCount += 1;
     },
+    removeItem(state, action) {
+      const itemToDelete = findExistingItem(state.items, action.payload);
+      state.items = state.items.filter((item) => item !== itemToDelete);
+      state.totalPrice -= itemToDelete.price * itemToDelete.count;
+      state.totalCount -= itemToDelete.count;
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(postCartItems.pending, (state) => {
+      .addCase(postCartItem.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(postCartItems.fulfilled, (state, action) => {
+      .addCase(postCartItem.fulfilled, (state, action) => {
         state.status = "success";
       })
-      .addCase(postCartItems.rejected, (state) => {
+      .addCase(postCartItem.rejected, (state) => {
+        state.status = "error";
+      })
+      .addCase(fetchCartItems.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchCartItems.fulfilled, (state, action) => {
+        state.status = "success";
+        state.items = action.payload;
+        state.totalCount = action.payload.reduce(
+          (acc, item) => acc + item.count,
+          0
+        );
+        state.totalPrice = action.payload.reduce(
+          (acc, item) => acc + item.count * item.price,
+          0
+        );
+      })
+      .addCase(fetchCartItems.rejected, (state) => {
+        state.status = "error";
+      })
+      .addCase(deleteCartItem.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(deleteCartItem.fulfilled, (state, action) => {
+        state.status = "success";
+      })
+      .addCase(deleteCartItem.rejected, (state) => {
         state.status = "error";
       });
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { addItem } = cartSlice.actions;
+export const { addItem, removeItem } = cartSlice.actions;
 
 export default cartSlice.reducer;

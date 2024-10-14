@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { useAppDispatch } from "../../redux/store";
-import { addItem } from "../../redux/slices/cartSlice";
+import { addItem, postCartItem } from "../../redux/slices/cartSlice";
 import { useSelector } from "react-redux";
 
 // TODO
@@ -15,7 +15,7 @@ const PizzaCard = ({ id, title, imageUrl, price }) => {
 
   const itemCount = useSelector((state) =>
     state.cart.items
-      .filter((item) => item.id === id)
+      .filter((item) => item.pizzaId === id)
       .reduce((acc, item) => acc + item.count, 0)
   );
 
@@ -23,8 +23,8 @@ const PizzaCard = ({ id, title, imageUrl, price }) => {
 
   const handleAddItem = () => {
     dispatch(
-      addItem({
-        id,
+      postCartItem({
+        pizzaId: id,
         title,
         imageUrl,
         price,

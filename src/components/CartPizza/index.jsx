@@ -1,15 +1,28 @@
 import React from "react";
 
 import { useAppDispatch } from "../../redux/store";
-import { addItem, postCartItems } from "../../redux/slices/cartSlice";
+import {
+  addItem,
+  deleteCartItem,
+  postCartItem,
+} from "../../redux/slices/cartSlice";
 
-const CartPizza = ({ id, imageUrl, title, price, type, size, count }) => {
+const CartPizza = ({
+  id,
+  pizzaId,
+  imageUrl,
+  title,
+  price,
+  type,
+  size,
+  count,
+}) => {
   const dispatch = useAppDispatch();
 
   const handleAddItem = () => {
     dispatch(
-      addItem({
-        id,
+      postCartItem({
+        pizzaId, // заменил id вместо pizzaId, так как в mokky.dev с ключевым названием id нельзя создать два одинаковых элемента
         title,
         imageUrl,
         price,
@@ -17,11 +30,13 @@ const CartPizza = ({ id, imageUrl, title, price, type, size, count }) => {
         size,
       })
     );
+  };
 
-    // не работает вызов postCartItems
+  const handleRemoveItem = () => {
     dispatch(
-      postCartItems({
+      deleteCartItem({
         id,
+        pizzaId,
         title,
         imageUrl,
         price,
@@ -94,6 +109,7 @@ const CartPizza = ({ id, imageUrl, title, price, type, size, count }) => {
 
       <svg
         className="cursor-pointer"
+        onClick={handleRemoveItem}
         width="32"
         height="32"
         viewBox="0 0 32 32"

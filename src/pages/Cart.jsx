@@ -1,9 +1,12 @@
 import React from "react";
 import CartPizza from "../components/CartPizza";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const { items, totalPrice, totalCount } = useSelector((state) => state.cart);
+
+  const navigate = useNavigate();
 
   return (
     <div className="py-24 max-w-4xl mx-auto">
@@ -99,7 +102,10 @@ const Cart = () => {
         </div>
 
         <div className="flex justify-between">
-          <button className="flex items-center gap-4 text-customExtraLightGray py-4 px-8 border rounded-full">
+          <button
+            className="flex items-center gap-4 text-customExtraLightGray py-4 px-8 border rounded-full"
+            onClick={() => navigate("/")}
+          >
             <svg
               width="8"
               height="14"
