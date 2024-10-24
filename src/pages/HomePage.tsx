@@ -7,16 +7,18 @@ import SortPopup from "../components/SortPopup";
 import PizzaCard from "../components/PizzaCard";
 import { Skeleton } from "../components/PizzaCard/Skeleton";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../redux/store";
+import { RootState, useAppDispatch } from "../redux/store";
 import { setFilters } from "../redux/slices/filterSlice";
 import { fetchPizzas } from "../redux/slices/pizzaSlice";
 
-const Home = () => {
-  const { items, status } = useSelector((state) => state.pizza);
+const Home: React.FC = () => {
+  const { items, status } = useSelector((state: RootState) => state.pizza);
   const isSearch = useRef(true);
   const isMounted = useRef(false);
 
-  const { categoryInd, sortBy } = useSelector((state) => state.filter);
+  const { categoryInd, sortBy } = useSelector(
+    (state: RootState) => state.filter
+  );
 
   const navigate = useNavigate();
 
@@ -52,7 +54,7 @@ const Home = () => {
   }, [categoryInd, sortBy]);
 
   if (status === "error")
-    return alert("Ошибка при получении пицц, повторите попытку позже.");
+    return <>{alert("Ошибка при получении пицц, повторите попытку позже.")}</>;
 
   return (
     <div>

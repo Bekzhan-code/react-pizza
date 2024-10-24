@@ -1,6 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+interface CartState {
+  items: Array<Object>;
+  status: string;
+  totalPrice: number;
+  totalCount: number;
+}
+
 export const fetchCartItems = createAsyncThunk(
   "cart/fetchCartItems",
   async () => {
@@ -84,7 +91,7 @@ export const decrementCartItem = createAsyncThunk(
   }
 );
 
-const initialState = {
+const initialState: CartState = {
   items: [],
   status: "loading", // loading | success | error
   totalPrice: 0,

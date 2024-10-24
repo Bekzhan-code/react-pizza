@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { useAppDispatch } from "../../redux/store";
+import { RootState, useAppDispatch } from "../../redux/store";
 import { addItem, postCartItem } from "../../redux/slices/cartSlice";
 import { useSelector } from "react-redux";
 
@@ -9,11 +9,18 @@ import { useSelector } from "react-redux";
 const types = ["тонкое", "традиционное"];
 const sizes = [26, 30, 40];
 
-const PizzaCard = ({ id, title, imageUrl, price }) => {
+type PizzaItem = {
+  id: string;
+  title: string;
+  imageUrl: string;
+  price: number;
+};
+
+const PizzaCard: React.FC<PizzaItem> = ({ id, title, imageUrl, price }) => {
   const [activeTypeId, setActiveTypeId] = useState(0);
   const [activeSizeId, setActiveSizeId] = useState(1);
 
-  const itemCount = useSelector((state) =>
+  const itemCount = useSelector((state: RootState) =>
     state.cart.items
       .filter((item) => item.pizzaId === id)
       .reduce((acc, item) => acc + item.count, 0)
