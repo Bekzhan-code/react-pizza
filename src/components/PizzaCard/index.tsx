@@ -3,18 +3,12 @@ import React, { useState } from "react";
 import { RootState, useAppDispatch } from "../../redux/store";
 import { addItem, postCartItem } from "../../redux/slices/cartSlice";
 import { useSelector } from "react-redux";
+import { PizzaItem } from "../../redux/slices/pizzaSlice";
 
 // TODO
 // НУЖНО ПЕРЕНЕСТИ ЭТИ ЗНАЧЕНИЯ В ОТДЕЛЬНЫЙ ФАЙЛ ДЛЯ ДОСТУПА ИЗ ОДНОГО МЕСТА
 const types = ["тонкое", "традиционное"];
 const sizes = [26, 30, 40];
-
-type PizzaItem = {
-  id: string;
-  title: string;
-  imageUrl: string;
-  price: number;
-};
 
 const PizzaCard: React.FC<PizzaItem> = ({ id, title, imageUrl, price }) => {
   const [activeTypeId, setActiveTypeId] = useState(0);

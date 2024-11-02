@@ -2,11 +2,13 @@ import React from "react";
 import CartPizza from "../components/CartPizza";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../redux/store";
+import { RootState, useAppDispatch } from "../redux/store";
 import { deleteAllCartItems } from "../redux/slices/cartSlice";
 
 const Cart = () => {
-  const { items, totalPrice, totalCount } = useSelector((state) => state.cart);
+  const { items, totalPrice, totalCount } = useSelector(
+    (state: RootState) => state.cart
+  );
 
   const dispatch = useAppDispatch();
 

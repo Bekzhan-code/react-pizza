@@ -1,52 +1,68 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { RootState } from "../store";
+
+type CartItem = {
+  pizzaId: number;
+  title: string;
+  imageUrl: string;
+  price: number;
+  type: string;
+  size: number;
+  count?: number;
+  id?: number;
+};
 
 interface CartState {
-  items: Array<Object>;
+  items: CartItem[];
   status: string;
   totalPrice: number;
   totalCount: number;
 }
 
-export const fetchCartItems = createAsyncThunk(
+export const fetchCartItems = createAsyncThunk<CartItem[]>(
   "cart/fetchCartItems",
   async () => {
-    const { data } = await axios.get("https://eaed36219e51a8b4.mokky.dev/cart");
+    const { data } = await axios.get<CartItem[]>(
+      "https://eaed36219e51a8b4.mokky.dev/cart"
+    );
     return data;
   }
 );
 
-export const postCartItem = createAsyncThunk(
-  "cart/postCartItem",
-  async (newItem, { getState, dispatch }) => {
-    const state = getState();
+export const postCartItem = createAsyncThunk<
+  CartItem,
+  CartItem,
+  { state: RootState }
+>("cart/postCartItem", async (newItem, { getState, dispatch }) => {
+  const state = getState();
 
-    const existingItem = findExistingItem(state.cart.items, newItem);
+  const existingItem = findExistingItem(state.cart.items, newItem);
 
-    dispatch(addItem(newItem));
-    if (!existingItem) {
-      const { data } = await axios.post(
-        `https://eaed36219e51a8b4.mokky.dev/cart`,
-        {
-          ...newItem,
-          count: 1,
-        }
-      );
-      return data;
-    } else {
-      const { data: fetchData } = await axios.get(
-        `https://eaed36219e51a8b4.mokky.dev/cart?pizzaId=${existingItem.pizzaId}&type=${existingItem.type}&size=${existingItem.size}`
-      );
-      const { data: patchData } = await axios.patch(
-        `https://eaed36219e51a8b4.mokky.dev/cart/${fetchData[0].id}`,
-        { count: existingItem.count + 1 }
-      );
-      return patchData;
-    }
+  dispatch(addItem(newItem));
+  if (!existingItem) {
+    const { data } = await axios.post(
+      // TODO Проверить как правильно указыать тип для методов post, patch, put, delete
+      `https://eaed36219e51a8b4.mokky.dev/cart`,
+      {
+        ...newItem,
+        count: 1,
+      }
+    );
+    return data;
+  } else {
+    const { data: fetchData } = await axios.get(
+      `https://eaed36219e51a8b4.mokky.dev/cart?pizzaId=${existingItem.pizzaId}&type=${existingItem.type}&size=${existingItem.size}`
+    );
+    const { data: patchData } = await axios.patch(
+      `https://eaed36219e51a8b4.mokky.dev/cart/${fetchData[0].id}`,
+      { count: existingItem.count + 1 }
+    );
+    return patchData;
   }
-);
+});
 
-export const deleteAllCartItems = createAsyncThunk(
+export const deleteAllCartItems = createAsyncThunk<CartItem[]>(
   "cart/deleteAllCartItems",
   async () => {
     const { data } = await axios.patch(
@@ -57,7 +73,7 @@ export const deleteAllCartItems = createAsyncThunk(
   }
 );
 
-export const deleteCartItem = createAsyncThunk(
+export const deleteCartItem = createAsyncThunk<void, CartItem>(
   "cart/deleteCartItem",
   async (item, { dispatch }) => {
     let response;
@@ -70,7 +86,7 @@ export const deleteCartItem = createAsyncThunk(
   }
 );
 
-export const decrementCartItem = createAsyncThunk(
+export const decrementCartItem = createAsyncThunk<CartItem | void, CartItem>(
   "cart/decrementCartItem",
   async (item, { dispatch }) => {
     let response;
