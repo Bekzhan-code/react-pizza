@@ -1,8 +1,8 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState } from "../store";
 
-type CartItem = {
+export type CartItem = {
   pizzaId: number;
   title: string;
   imageUrl: string;
@@ -114,7 +114,7 @@ const initialState: CartState = {
   totalCount: 0,
 };
 
-const findExistingItem = (items, newItem) => {
+const findExistingItem = (items: CartItem[], newItem: CartItem) => {
   return items.find((item) => {
     if (
       item.pizzaId === newItem.pizzaId &&
@@ -125,7 +125,7 @@ const findExistingItem = (items, newItem) => {
   });
 };
 
-const removeItemFromArr = (items, deleteItem) => {
+const removeItemFromArr = (items: CartItem[], deleteItem: CartItem) => {
   return items.filter((item) => item !== deleteItem);
 };
 
@@ -133,7 +133,7 @@ export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addItem(state, action) {
+    addItem(state, action: PayloadAction<CartItem>) {
       const newItem = action.payload;
 
       // если размер или тип пиццы отлчиается от пицц в корзине (даже если id равные), то пицца добавляется как новый элемент
@@ -144,13 +144,13 @@ export const cartSlice = createSlice({
       state.totalPrice += newItem.price;
       state.totalCount += 1;
     },
-    removeItem(state, action) {
+    removeItem(state, action: PayloadAction<CartItem>) {
       const itemToDelete = findExistingItem(state.items, action.payload);
       state.items = removeItemFromArr(state.items, itemToDelete);
       state.totalPrice -= itemToDelete.price * itemToDelete.count;
       state.totalCount -= itemToDelete.count;
     },
-    decrementItem(state, action) {
+    decrementItem(state, action: PayloadAction<number>) {
       const itemToDecrement = state.items.find(
         (item) => item.id === action.payload
       );

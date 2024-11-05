@@ -22,7 +22,7 @@ const SortPopup = () => {
   const [activeSortInd, setActiveSortInd] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
-  const sortRef = useRef();
+  const sortRef = useRef<HTMLDivElement>(null);
 
   const dispatch = useAppDispatch();
 
@@ -33,7 +33,8 @@ const SortPopup = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (!sortRef.current.contains(event.target)) setIsVisible(false);
+      if (sortRef.current && !sortRef.current.contains(event.target))
+        setIsVisible(false);
     };
     document.body.addEventListener("click", handleClickOutside);
 

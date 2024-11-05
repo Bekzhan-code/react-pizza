@@ -1,13 +1,15 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { useAppDispatch } from "../redux/store";
+import { RootState, useAppDispatch } from "../redux/store";
 import { setCategoryInd } from "../redux/slices/filterSlice";
 
 const categories = ["Все", "Мясные", "Колбасные", "Сырные", "Микс", "Острые"];
 
 const Categories = () => {
   // const [activeCategoryInd, setActiveCategoryInd] = useState(0);
-  const activeCategoryInd = useSelector((state) => state.filter.categoryInd);
+  const activeCategoryInd = useSelector(
+    (state: RootState) => state.filter.categoryInd
+  );
   const dispatch = useAppDispatch();
 
   return (

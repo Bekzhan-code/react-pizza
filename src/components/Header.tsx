@@ -1,9 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { RootState } from "../redux/store";
 
 const Header = () => {
-  const { totalPrice, totalCount } = useSelector((state) => state.cart);
+  const { totalPrice, totalCount } = useSelector(
+    (state: RootState) => state.cart
+  );
 
   return (
     <div className="flex justify-between py-12">

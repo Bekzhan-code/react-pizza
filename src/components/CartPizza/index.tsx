@@ -2,13 +2,13 @@ import React from "react";
 
 import { useAppDispatch } from "../../redux/store";
 import {
-  addItem,
+  CartItem,
   decrementCartItem,
   deleteCartItem,
   postCartItem,
 } from "../../redux/slices/cartSlice";
 
-const CartPizza = ({
+const CartPizza: React.FC<CartItem> = ({
   id,
   pizzaId,
   imageUrl,

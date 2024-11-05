@@ -8,7 +8,7 @@ import PizzaCard from "../components/PizzaCard";
 import { Skeleton } from "../components/PizzaCard/Skeleton";
 import { useNavigate } from "react-router-dom";
 import { RootState, useAppDispatch } from "../redux/store";
-import { setFilters } from "../redux/slices/filterSlice";
+import { FilterState, setFilters } from "../redux/slices/filterSlice";
 import { fetchPizzas } from "../redux/slices/pizzaSlice";
 
 const Home: React.FC = () => {
@@ -27,7 +27,9 @@ const Home: React.FC = () => {
   useEffect(() => {
     // получение параметров фильтрации из адресной строки и изменение их в редаксе
     if (window.location.search) {
-      const params = qs.parse(window.location.search.substring(1));
+      const params = qs.parse(
+        window.location.search.substring(1)
+      ) as unknown as FilterState;
       dispatch(setFilters(params));
       isSearch.current = false;
     }
