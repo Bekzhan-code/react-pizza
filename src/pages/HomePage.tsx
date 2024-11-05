@@ -29,7 +29,7 @@ const Home: React.FC = () => {
     if (window.location.search) {
       const params = qs.parse(
         window.location.search.substring(1)
-      ) as unknown as FilterState;
+      ) as unknown as FilterState; // TODO ИСПРАВИТЬ КОД
       dispatch(setFilters(params));
       isSearch.current = false;
     }

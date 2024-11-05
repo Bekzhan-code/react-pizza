@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { RootState, useAppDispatch } from "../redux/store";
 import { deleteAllCartItems } from "../redux/slices/cartSlice";
 
-const Cart = () => {
+const Cart: React.FC = () => {
   const { items, totalPrice, totalCount } = useSelector(
     (state: RootState) => state.cart
   );

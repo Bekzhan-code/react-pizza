@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { RootState } from "../redux/store";
 
-const Header = () => {
+const Header: React.FC = () => {
   const { totalPrice, totalCount } = useSelector(
     (state: RootState) => state.cart
   );

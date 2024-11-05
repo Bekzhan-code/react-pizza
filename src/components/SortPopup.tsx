@@ -18,7 +18,7 @@ const sortOptions = [
   },
 ];
 
-const SortPopup = () => {
+const SortPopup: React.FC = () => {
   const [activeSortInd, setActiveSortInd] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -26,7 +26,7 @@ const SortPopup = () => {
 
   const dispatch = useAppDispatch();
 
-  const handleSortType = (index) => {
+  const handleSortType = (index: number) => {
     setActiveSortInd(index);
     dispatch(setSortType(sortOptions[index].sortBy));
   };

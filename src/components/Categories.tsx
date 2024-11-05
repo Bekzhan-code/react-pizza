@@ -5,7 +5,7 @@ import { setCategoryInd } from "../redux/slices/filterSlice";
 
 const categories = ["Все", "Мясные", "Колбасные", "Сырные", "Микс", "Острые"];
 
-const Categories = () => {
+const Categories: React.FC = () => {
   // const [activeCategoryInd, setActiveCategoryInd] = useState(0);
   const activeCategoryInd = useSelector(
     (state: RootState) => state.filter.categoryInd
