@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState } from "../store";
+import { Status } from "./pizzaSlice";
 
 export type CartItem = {
   pizzaId: number;
@@ -15,7 +16,7 @@ export type CartItem = {
 
 interface CartState {
   items: CartItem[];
-  status: string;
+  status: Status;
   totalPrice: number;
   totalCount: number;
 }
@@ -109,7 +110,7 @@ export const decrementCartItem = createAsyncThunk<CartItem | void, CartItem>(
 
 const initialState: CartState = {
   items: [],
-  status: "loading", // loading | success | error
+  status: Status.LOADING, // loading | success | error
   totalPrice: 0,
   totalCount: 0,
 };
@@ -163,19 +164,19 @@ export const cartSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(postCartItem.pending, (state) => {
-        state.status = "loading";
+        state.status = Status.LOADING;
       })
       .addCase(postCartItem.fulfilled, (state, action) => {
-        state.status = "success";
+        state.status = Status.SUCCESS;
       })
       .addCase(postCartItem.rejected, (state) => {
-        state.status = "error";
+        state.status = Status.ERROR;
       })
       .addCase(fetchCartItems.pending, (state) => {
-        state.status = "loading";
+        state.status = Status.LOADING;
       })
       .addCase(fetchCartItems.fulfilled, (state, action) => {
-        state.status = "success";
+        state.status = Status.SUCCESS;
         state.items = action.payload;
         state.totalCount = action.payload.reduce(
           (acc, item) => acc + item.count,
@@ -187,37 +188,37 @@ export const cartSlice = createSlice({
         );
       })
       .addCase(fetchCartItems.rejected, (state) => {
-        state.status = "error";
+        state.status = Status.ERROR;
       })
       .addCase(deleteCartItem.pending, (state) => {
-        state.status = "loading";
+        state.status = Status.LOADING;
       })
       .addCase(deleteCartItem.fulfilled, (state, action) => {
-        state.status = "success";
+        state.status = Status.SUCCESS;
       })
       .addCase(deleteCartItem.rejected, (state) => {
-        state.status = "error";
+        state.status = Status.ERROR;
       })
       .addCase(deleteAllCartItems.pending, (state) => {
-        state.status = "loading";
+        state.status = Status.LOADING;
       })
       .addCase(deleteAllCartItems.fulfilled, (state, action) => {
-        state.status = "success";
+        state.status = Status.SUCCESS;
         state.items = [];
         state.totalCount = 0;
         state.totalPrice = 0;
       })
       .addCase(deleteAllCartItems.rejected, (state) => {
-        state.status = "error";
+        state.status = Status.ERROR;
       })
       .addCase(decrementCartItem.pending, (state) => {
-        state.status = "loading";
+        state.status = Status.LOADING;
       })
       .addCase(decrementCartItem.fulfilled, (state, action) => {
-        state.status = "success";
+        state.status = Status.SUCCESS;
       })
       .addCase(decrementCartItem.rejected, (state) => {
-        state.status = "error";
+        state.status = Status.ERROR;
       });
   },
 });

@@ -12,13 +12,19 @@ export type PizzaItem = {
 
 interface PizzaState {
   items: PizzaItem[];
-  status: string;
+  status: Status;
 }
 
 type SearchPizzaParams = {
   categoryInd: number;
   sortBy: string;
 };
+
+export enum Status {
+  LOADING = "loading",
+  SUCCESS = "success",
+  ERROR = "error",
+}
 
 export const fetchPizzas = createAsyncThunk<PizzaItem[], SearchPizzaParams>(
   "pizza/fetchPizzas",
@@ -34,7 +40,7 @@ export const fetchPizzas = createAsyncThunk<PizzaItem[], SearchPizzaParams>(
 
 const initialState: PizzaState = {
   items: [],
-  status: "loading", // loading | success | error
+  status: Status.LOADING, // loading | success | error
 };
 
 export const pizzaSlice = createSlice({
@@ -45,15 +51,15 @@ export const pizzaSlice = createSlice({
     builder
       .addCase(fetchPizzas.pending, (state) => {
         state.items = [];
-        state.status = "loading";
+        state.status = Status.LOADING;
       })
       .addCase(fetchPizzas.fulfilled, (state, action) => {
         state.items = action.payload;
-        state.status = "success";
+        state.status = Status.SUCCESS;
       })
       .addCase(fetchPizzas.rejected, (state) => {
         state.items = [];
-        state.status = "error";
+        state.status = Status.ERROR;
       });
   },
 });
